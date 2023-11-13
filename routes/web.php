@@ -3,6 +3,7 @@
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +37,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/get-comments/{id}', [CommentController::class, 'getComments'])->name('comments.create');
 
-    Route::get('/profile', [UserProfileController::class,'index'])->name('user.profile');
+    Route::get('/profile', [UserProfileController::class, 'index'])->name('user.profile');
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
 
+    Route::get('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
 });

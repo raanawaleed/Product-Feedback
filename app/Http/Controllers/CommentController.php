@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CommentRequest;
 use App\Models\Comment;
 use App\Models\Feedback;
+use App\Models\Notification;
 use Illuminate\Http\Request;
+
+use App\Notifications\NewCommentNotification;
 
 class CommentController extends Controller
 {
@@ -32,12 +35,23 @@ class CommentController extends Controller
 
         $feedback->comments()->save($comment);
 
+        // Create a notification for the user who submitted the feedback
+        $notification = new Notification();
+        $notification->user_id = $feedback->user_id; // The user who submitted the feedback
+        $notification->feedback_id = $feedback->id;
+        $notification->message = 'New comment on your feedback item';
+        $notification->save();
+
+        // send notification 
+        //$user->notify(new NewCommentNotification($feedback));
+        
         return redirect()->route('feedback.index')->with('success', 'Comment added successfully.');
     }
 
-    public function getComments($feedbackId){
+    public function getComments($feedbackId)
+    {
         $feedback = Feedback::with('comments')->find($feedbackId);
-        
+
         return view('comment.comments', compact('feedback'));
     }
 }
