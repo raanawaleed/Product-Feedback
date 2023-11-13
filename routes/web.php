@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\FeedbackAdminController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HomeController;
@@ -41,4 +42,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
 
     Route::get('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+});
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    //  admin routes here
+    Route::get('/admin/feedback', [FeedbackAdminController::class, 'index'])->name('admin.feedback.index');
+    Route::get('/admin/feedback/{id}/edit', [FeedbackAdminController::class, 'edit'])->name('admin.feedback.edit');
+    Route::patch('/admin/feedback/{id}', [FeedbackAdminController::class, 'update'])->name('admin.feedback.update');
+    Route::delete('/admin/feedback/{id}', [FeedbackAdminController::class, 'destroy'])->name('admin.feedback.destroy');
 });
