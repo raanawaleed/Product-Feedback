@@ -30,4 +30,19 @@ class FeedbackController extends Controller
         return redirect()->route('feedback.index')
             ->with('success', 'Feedback submitted successfully');
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $category = $request->input('category');
+
+        // Perform the search and apply filters
+        $results = Feedback::where('title', 'LIKE', "%$query%")
+            ->when($category, function ($query, $category) {
+                return $query->where('category', $category);
+            })
+            ->get();
+
+        return view('feedback.search', compact('results'));
+    }
 }

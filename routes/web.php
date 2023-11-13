@@ -42,6 +42,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
 
     Route::get('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+
+    Route::get('/feedback/search', [FeedbackController::class,'search'])->name('feedback.search');
+
+});
+
+Route::get('/admin', function () {
+    return redirect()->route('admin.feedback.index');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
